@@ -1,0 +1,34 @@
+<div class="studio-llama-xblock">
+    <label for="display_name">Display Name:</label>
+    <input type="text" id="display_name" value="{display_name}">
+    <button id="save-display-name">Save</button>
+    <span id="save-status"></span> 
+</div>
+<script>
+    $('#save-display-name').click(function () {
+        var display_name = $('#display_name').val();
+        $('#save-status').text("Saving..."); // 显示保存状态
+
+        $.ajax({
+            type: "POST",
+            url: "/xblock/llama/handler/save_display_name", // URL
+            data: JSON.stringify({ 'display_name': display_name }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#save-status').text("Saved!");
+                } else {
+                    $('#save-status').text("Error: " + data.message);
+                }
+            },
+            error: function (error) {
+                console.error("Error:", error);
+                $('#save-status').text("Error: Could not save.");
+            },
+            complete: function() {
+                setTimeout(function(){ $('#save-status').text("") }, 3000); // 3秒后清除提示信息
+            }
+        });
+    });
+</script>
