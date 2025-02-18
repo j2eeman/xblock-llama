@@ -36,7 +36,7 @@ class LlamaXBlock(XBlock):
     def get_llama_response(self, prompt):
         try:
             # 替换为你的 Ollama 或 Open WebUI 接口地址
-            api_url = "http://localhost:11434/api/generate"  
+            api_url = "http://172.31.35.140:11434/api/generate"  
             headers = {'Content-Type': 'application/json'}
             data = {"model": "deepseek-r1:1.5b", "prompt": prompt} # 根据你的 API 调整
             response = requests.post(api_url, headers=headers, json=data)
