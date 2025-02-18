@@ -1,10 +1,11 @@
 $(function () {
     $('#get-response').click(function () {
         var prompt = $('#prompt').val();
+        var modelType = $('#model-type').val(); // 获取选择的模型类型
         $.ajax({
             type: "POST",
             url: "/xblock/llama/handler/get_response",
-            data: JSON.stringify({ 'prompt': prompt }),
+            data: JSON.stringify({ 'prompt': prompt, 'model_type': modelType }), // 添加 model_type
             contentType: "application/json",
             dataType: "json",
             success: function (data) {

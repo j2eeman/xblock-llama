@@ -19,6 +19,11 @@ class LlamaXBlock(XBlock):
         default="", 
         scope=Scope.user_state
     )
+    deepseek_api_key = String(
+        display_name="DeepSeek API Key", 
+        default="sk-7843340cef7a43cf9f25a37e2b55d12c", 
+        scope=Scope.settings
+    )
 
     def student_view(self, context=None):
         return self.render_template("student_view.html", context)
@@ -26,19 +31,23 @@ class LlamaXBlock(XBlock):
     def studio_view(self, context=None):
         return self.render_template("studio_view.html", context)
 
-    @XBlock.json_handler
-    def get_response(self, data, suffix=''):
-        prompt = data.get('prompt')
-        response = self.get_llama_response(prompt) 
-        self.response = response
-        return {"response": response}
-
     def get_llama_response(self, prompt):
         try:
             # 替换为你的 Ollama 或 Open WebUI 接口地址
             api_url = "http://172.31.35.140:11434/api/generate"  
             headers = {'Content-Type': 'application/json'}
-            data = {"model": "deepseek-r1:1.5b", "prompt": prompt} # 根据你的 API 调整
+            # Ollama 请求参数
+            data = {
+                "model": "llama2",  # 替换为你要使用的 Ollama 模型名称
+                "prompt": prompt,
+                "stream": False,  # 是否流式传输响应，这里设置为 False
+                "options": {
+                    # 可选参数，根据需要调整
+                    "temperature": 0.7,
+                    "max_tokens": 100
+                }
+            }
+
             response = requests.post(api_url, headers=headers, json=data)
             response.raise_for_status()  # 检查请求是否成功
 
@@ -49,7 +58,7 @@ class LlamaXBlock(XBlock):
             elif "choices" in json_data: # 示例：Open WebUI
                 return json_data["choices"][0]["text"]
             else:
-                return "Error: Could not parse response"
+                return "Error: Could not parse response from Ollama"
 
         except requests.exceptions.RequestException as e:
             return f"Error: {e}"
@@ -65,7 +74,88 @@ class LlamaXBlock(XBlock):
         )
         with open(template_path, 'r') as f:
             template = f.read()
-        return template.format(**context)
+        return template.format(**context)    
+
+    def get_deepseek_response(self, prompt):
+        api_key = self.deepseek_api_key
+        if not api_key:
+            return "Error: DeepSeek API Key is not set."
+
+        try:
+            api_url = "https://api.deepseek.com/v1/chat/completions"  # DeepSeek API 地址
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {api_key}'
+            }
+            data = {
+                "model": "deepseek-chat",  # DeepSeek 模型名称
+                "messages": [{"role": "user", "content": prompt}]
+            }
+
+            response = requests.post(api_url, headers=headers, json=data)
+            response.raise_for_status()
+
+            json_data = response.json()
+
+            # 解析 DeepSeek 返回的 JSON 数据
+            if "choices" in json_data and len(json_data["choices"]) > 0:
+                return json_data["choices"][0]["message"]["content"]
+            else:
+                return "Error: Could not parse response from DeepSeek"
+
+        except requests.exceptions.RequestException as e:
+            return f"Error: {e}"
+        except json.JSONDecodeError as e:
+            return f"Error decoding JSON: {e}"
+        
+    def get_deepseek_r1_1_5b_response(self, prompt):
+        try:
+            # Ollama API 地址
+            api_url = "http://172.31.35.140:11434/api/generate"  # 默认端口为 11434
+            headers = {'Content-Type': 'application/json'}
+
+            # Ollama 请求参数
+            data = {
+                "model": "deepseek-r1:1.5b",  # 指定 Ollama 模型名称
+                "prompt": prompt,
+                "stream": False,  # 是否流式传输响应，这里设置为 False
+                "options": {
+                    # 可选参数，根据需要调整
+                    "temperature": 0.7,
+                    "max_tokens": 100
+                }
+            }
+
+            response = requests.post(api_url, headers=headers, json=data)
+            response.raise_for_status()  # 检查请求是否成功
+
+            json_data = response.json()
+
+            # 解析 Ollama 返回的 JSON 数据
+            if "response" in json_data:
+                return json_data["response"]
+            else:
+                return "Error: Could not parse response from Ollama"
+
+        except requests.exceptions.RequestException as e:
+            return f"Error: {e}"
+        except json.JSONDecodeError as e:
+            return f"Error decoding JSON: {e}"
+
+    @XBlock.json_handler
+    def get_response(self, data, suffix=''):
+        prompt = data.get('prompt')
+        model_type = data.get('model_type', 'llama')  # 获取选择的模型类型
+        if model_type == 'llama':
+            response = self.get_llama_response(prompt)
+        elif model_type == 'deepseek':
+            response = self.get_deepseek_response(prompt)
+        elif model_type == 'deepseek-r1:1.5b':  # 添加 deepseek-r1:1.5b 模型
+            response = self.get_deepseek_r1_1_5b_response(prompt)
+        else:
+            response = "Error: Invalid model type."
+        self.response = response
+        return {"response": response}    
     
     @XBlock.json_handler
     def save_display_name(self, data, suffix=''):
@@ -74,4 +164,13 @@ class LlamaXBlock(XBlock):
             self.display_name = display_name  # 保存 display_name
             return {"success": True}
         except Exception as e:
-            return {"success": False, "message": str(e)}    
+            return {"success": False, "message": str(e)}
+        
+    @XBlock.json_handler
+    def save_deepseek_api_key(self, data, suffix=''):
+        deepseek_api_key = data.get('deepseek_api_key')
+        try:
+            self.deepseek_api_key = deepseek_api_key
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "message": str(e)}            

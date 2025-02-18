@@ -3,6 +3,11 @@
     <input type="text" id="display_name" value="{display_name}">
     <button id="save-display-name">Save</button>
     <span id="save-status"></span> 
+
+    <label for="deepseek_api_key">DeepSeek API Key:</label>
+    <input type="text" id="deepseek_api_key" value="{deepseek_api_key}">
+    <button id="save-deepseek-api-key">Save</button>
+    <span id="save-deepseek-api-key-status"></span>
 </div>
 <script>
     $('#save-display-name').click(function () {
@@ -28,6 +33,33 @@
             },
             complete: function() {
                 setTimeout(function(){ $('#save-status').text("") }, 3000); // 3秒后清除提示信息
+            }
+        });
+    });
+
+    $('#save-deepseek-api-key').click(function () {
+        var deepseek_api_key = $('#deepseek_api_key').val();
+        $('#save-deepseek-api-key-status').text("Saving...");
+
+        $.ajax({
+            type: "POST",
+            url: "/xblock/llama/handler/save_deepseek_api_key",
+            data: JSON.stringify({ 'deepseek_api_key': deepseek_api_key }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#save-deepseek-api-key-status').text("Saved!");
+                } else {
+                    $('#save-deepseek-api-key-status').text("Error: " + data.message);
+                }
+            },
+            error: function (error) {
+                console.error("Error:", error);
+                $('#save-deepseek-api-key-status').text("Error: Could not save.");
+            },
+            complete: function() {
+                setTimeout(function(){ $('#save-deepseek-api-key-status').text("") }, 3000); // 3秒后清除提示信息
             }
         });
     });
