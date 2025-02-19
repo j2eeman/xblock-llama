@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         'xblock.v1': [
-            'xblock_llama = xblock_llama.xblock_llama:LlamaXBlock',
+            'xblock-llama = xblock_llama.xblock_llama:LlamaXBlock',
         ]
     },
 )
