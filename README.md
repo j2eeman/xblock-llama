@@ -8,4 +8,4 @@ openedx xblock plugin access the ollama for chat or search.
 ## 安装
 
 ```bash
-pip install git+[https://github.com/j2eeman/xblock-llama.git](https://github.com/j2eeman/xblock-llama.git)
+pip install git+https://github.com/j2eeman/xblock-llama.git
