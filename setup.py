@@ -4,10 +4,10 @@ setup(
     name='xblock-llama',
     version='0.1.0',
     description='Llama XBlock',
-    packages=find_packages(),
+    packages=find_packages(include=['xblock_llama*']),
     include_package_data=True,  # This is crucial!
     package_data={
-        'xblock_llama': ['xblock_llama/templates/*.html', 'xblock_llama/static/css/*.css', 'xblock_llama/static/js/*.js'],
+        'xblock_llama': ['templates/*.html', 'static/css/*.css', 'static/js/*.js'],
     },
     install_requires=[
         'xblock',
@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         'xblock.v1': [
-            'xblock-llama = xblock_llama.xblock_llama:LlamaXBlock',
+            'xblock-llama = xblock_llama:LlamaXBlock',
         ]
     },
 )
