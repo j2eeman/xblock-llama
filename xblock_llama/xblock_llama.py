@@ -21,7 +21,7 @@ class LlamaXBlock(XBlock):
     )
     deepseek_api_key = String(
         display_name="DeepSeek API Key", 
-        default="sk-7843340cef7a43cf9f25a37e2b55d12c", 
+        default="<Your DeepSeek API Key>", 
         scope=Scope.settings
     )
 
