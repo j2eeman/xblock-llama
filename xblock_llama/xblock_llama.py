@@ -35,10 +35,10 @@ class LlamaXBlock(XBlock):
         context = context or {}  # 初始化 context
         context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
         context['response'] = self.response  # 将 response 字段添加到 context 中 
-        html = self.render_template("static/html/student_view.html", context) 
+        html = self.render_template("/static/html/student_view.html", context) 
         frag = Fragment(html)
-        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-        frag.add_javascript(self.resource_string("static/js/src/xblock_llama.js"))
+        frag.add_css(self.resource_string("/static/css/xblock_llama.css"))
+        frag.add_javascript(self.resource_string("/static/js/src/xblock_llama.js"))
         frag.initialize_js('LlamaXBlock', json_args=self.get_context())    
         return frag
 
@@ -50,8 +50,8 @@ class LlamaXBlock(XBlock):
 
         html = self.render_template("studio_view.html", context)
         frag = Fragment(html)
-        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-        frag.add_javascript(self.resource_string("static/js/src/xblock_llama.js"))
+        frag.add_css(self.resource_string("/static/css/xblock_llama.css"))
+        frag.add_javascript(self.resource_string("/static/js/src/xblock_llama.js"))
         frag.initialize_js('LlamaXBlock', json_args=self.get_context())  
 
         return frag
