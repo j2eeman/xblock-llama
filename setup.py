@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='xblock-llama',
-    version='0.1.0',
+    version='0.2.0',
     description='Llama XBlock',
     packages=find_packages(include=['xblock_llama*']),
     include_package_data=True,  # This is crucial!
