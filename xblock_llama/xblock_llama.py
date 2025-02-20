@@ -187,4 +187,13 @@ class LlamaXBlock(XBlock):
             self.deepseek_api_key = deepseek_api_key
             return {"success": True}
         except Exception as e:
-            return {"success": False, "message": str(e)}            
+            return {"success": False, "message": str(e)}
+        
+    @XBlock.json_handler
+    def save_model_type(self, data, suffix=''):
+        model_type = data.get('model_type')
+        try:
+            self.model_type = model_type
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "message": str(e)}                     
