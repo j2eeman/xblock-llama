@@ -31,9 +31,16 @@ class LlamaXBlock(XBlock):
     )
 
     def student_view(self, context=None):
+        context = context or {}  # 初始化 context
+        context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
+        context['response'] = self.response  # 将 response 字段添加到 context 中  
         return self.render_template("student_view.html", context)
 
     def studio_view(self, context=None):
+        context = context or {}
+        context['display_name'] = self.display_name
+        context['model_type'] = self.model_type
+        context['deepseek_api_key'] = self.deepseek_api_key
         return self.render_template("studio_view.html", context)
 
     def get_llama_response(self, prompt):
