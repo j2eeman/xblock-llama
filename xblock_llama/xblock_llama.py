@@ -42,7 +42,14 @@ class LlamaXBlock(XBlock):
         context['model_type'] = self.model_type
         context['deepseek_api_key'] = self.deepseek_api_key
         return self.render_template("studio_view.html", context)
-
+    
+    @staticmethod
+    def js_init_fn(runtime, element):
+        return """
+            function LlamaXBlock(runtime, element) {
+                // ... XBlock 初始化代码 ...
+            }
+        """
     def get_llama_response(self, prompt):
         try:
             # 替换为你的 Ollama 或 Open WebUI 接口地址
