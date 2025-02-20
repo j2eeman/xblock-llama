@@ -19,6 +19,11 @@ class LlamaXBlock(XBlock):
         default="", 
         scope=Scope.user_state
     )
+    model_type = String(
+        display_name="Model Type", 
+        default="llama", 
+        scope=Scope.settings
+    )
     deepseek_api_key = String(
         display_name="DeepSeek API Key", 
         default="<Your DeepSeek API Key>", 
@@ -34,7 +39,8 @@ class LlamaXBlock(XBlock):
     def get_llama_response(self, prompt):
         try:
             # 替换为你的 Ollama 或 Open WebUI 接口地址
-            api_url = "http://172.31.35.140:11434/api/generate"  
+            # api_url = "http://172.31.35.140:11434/api/generate"  
+            api_url = "http://172.16.15.56:11434/api/generate"
             headers = {'Content-Type': 'application/json'}
             # Ollama 请求参数
             data = {
@@ -111,7 +117,8 @@ class LlamaXBlock(XBlock):
     def get_deepseek_r1_1_5b_response(self, prompt):
         try:
             # Ollama API 地址
-            api_url = "http://172.31.35.140:11434/api/generate"  # 默认端口为 11434
+            # api_url = "http://172.31.35.140:11434/api/generate"  # 默认端口为 11434
+            api_url = "http://172.16.15.56:11434/api/generate" 
             headers = {'Content-Type': 'application/json'}
 
             # Ollama 请求参数

@@ -8,6 +8,15 @@
     <input type="text" id="deepseek_api_key" value="{deepseek_api_key}">
     <button id="save-deepseek-api-key">Save</button>
     <span id="save-deepseek-api-key-status"></span>
+
+    <label for="model_type">Model Type:</label>
+    <select id="model_type">
+        <option value="llama" {% if model_type == 'llama' %}selected{% endif %}>Llama</option>
+        <option value="deepseek" {% if model_type == 'deepseek' %}selected{% endif %}>DeepSeek (DeepSeek API)</option>
+        <option value="deepseek-r1:1.5b" {% if model_type == 'deepseek-r1:1.5b' %}selected{% endif %}>DeepSeek-r1:1.5b (Ollama)</option>
+    </select>
+    <button id="save-model-type">Save</button>
+    <span id="save-model-type-status"></span>
 </div>
 <script>
     $('#save-display-name').click(function () {
@@ -60,6 +69,33 @@
             },
             complete: function() {
                 setTimeout(function(){ $('#save-deepseek-api-key-status').text("") }, 3000); // 3秒后清除提示信息
+            }
+        });
+    });
+
+    $('#save-model-type').click(function () {
+        var modelType = $('#model_type').val();
+        $('#save-model-type-status').text("Saving...");
+
+        $.ajax({
+            type: "POST",
+            url: "/xblock/llama/handler/save_model_type",
+            data: JSON.stringify({ 'model_type': modelType }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#save-model-type-status').text("Saved!");
+                } else {
+                    $('#save-model-type-status').text("Error: " + data.message);
+                }
+            },
+            error: function (error) {
+                console.error("Error:", error);
+                $('#save-model-type-status').text("Error: Could not save.");
+            },
+            complete: function() {
+                setTimeout(function(){ $('#save-model-type-status').text("") }, 3000); // 3秒后清除提示信息
             }
         });
     });
