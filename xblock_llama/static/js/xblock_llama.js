@@ -4,6 +4,7 @@ function LlamaXBlock(runtime, element) {
 }
 
 function js_init_fn(runtime, element) {    
+    console.log("XBlock initialized!");
     return new LlamaXBlock(runtime, element);
 }
 runtime.register('llama', js_init_fn);

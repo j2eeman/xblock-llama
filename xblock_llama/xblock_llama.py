@@ -2,6 +2,7 @@ from xblock.core import XBlock
 from xblock.fields import String, Integer, Scope
 import requests
 import json
+from web_fragments.fragment import Fragment
 
 class LlamaXBlock(XBlock):
     display_name = String(
@@ -33,20 +34,32 @@ class LlamaXBlock(XBlock):
     def student_view(self, context=None):
         context = context or {}  # 初始化 context
         context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
-        context['response'] = self.response  # 将 response 字段添加到 context 中  
-        return self.render_template("student_view.html", context)
+        context['response'] = self.response  # 将 response 字段添加到 context 中 
+        html = self.render_template("static/html/student_view.html", context) 
+        frag = Fragment(html)
+        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
+        frag.add_javascript(self.resource_string("static/js/src/xblock_llama.js"))
+        frag.initialize_js('LlamaXBlock', json_args=self.get_context())    
+        return frag
 
     def studio_view(self, context=None):
         context = context or {}
         context['display_name'] = self.display_name
         context['model_type'] = self.model_type
         context['deepseek_api_key'] = self.deepseek_api_key
-        return self.render_template("studio_view.html", context)
+
+        html = self.render_template("studio_view.html", context)
+        frag = Fragment(html)
+        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
+        frag.add_javascript(self.resource_string("static/js/src/xblock_llama.js"))
+        frag.initialize_js('LlamaXBlock', json_args=self.get_context())  
+
+        return frag
     
     @staticmethod
     def js_init_fn(runtime, element):
         return ""
-#        return """
+#        return ""
 #            function LlamaXBlock(runtime, element) {
 #                // ... XBlock 初始化代码 ...
 #            }
