@@ -1,11 +1,13 @@
 function LlamaXBlock(runtime, element) {
     // ... XBlock 初始化代码 ...
+    console.log("XBlock initialized!");
 }
 
-function js_init_fn(runtime, element) {
+function js_init_fn(runtime, element) {    
     return new LlamaXBlock(runtime, element);
 }
 runtime.register('llama', js_init_fn);
+
 $(function () {
     $('#get-response').click(function () {
         var prompt = $('#prompt').val();

@@ -45,11 +45,13 @@ class LlamaXBlock(XBlock):
     
     @staticmethod
     def js_init_fn(runtime, element):
-        return """
-            function LlamaXBlock(runtime, element) {
-                // ... XBlock 初始化代码 ...
-            }
-        """
+        return ""
+#        return """
+#            function LlamaXBlock(runtime, element) {
+#                // ... XBlock 初始化代码 ...
+#            }
+#        """
+
     def get_llama_response(self, prompt):
         try:
             # 替换为你的 Ollama 或 Open WebUI 接口地址
