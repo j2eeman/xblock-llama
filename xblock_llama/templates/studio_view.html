@@ -20,7 +20,7 @@
     <span id="save-model-type-status"></span>
 </div>
 <script>
-    function LlamaXBlock(runtime, element) {
+    function LlamaXBlock(runtime, element， context) {
         $('#save-display-name').click(function () {
             var display_name = $('#display_name').val();
             $('#save-status').text("Saving..."); // 显示保存状态
@@ -103,8 +103,8 @@
         });
     }
 
-    function js_init_fn(runtime, element) {
-        return new LlamaXBlock(runtime, element);
+    function js_init_fn(runtime, element， context) {
+        return new LlamaXBlock(runtime, element， context);
     }
 
     $(function () {
