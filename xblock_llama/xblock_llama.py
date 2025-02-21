@@ -4,11 +4,12 @@ import requests
 import json
 from web_fragments.fragment import Fragment
 from xblockutils.resources import ResourceLoader
-#
-#for self.resource_string css, js
-#loader = ResourceLoader(__name__)
+import pkg_resources
 
 class LlamaXBlock(XBlock):
+    #for self.resource_string css, js
+    loader = ResourceLoader(__name__)
+
     display_name = String(
         display_name="Llama XBlock", 
         default="Llama", 
@@ -34,7 +35,12 @@ class LlamaXBlock(XBlock):
         default="<Your DeepSeek API Key>", 
         scope=Scope.settings
     )
-
+    @staticmethod
+    def resource_string(path):
+        """Handy helper for getting resources from our kit."""
+        data = pkg_resources.resource_string(__name__, path)
+        return data.decode("utf8")
+    
     def student_view(self, context=None):
         context = context or {}  # 初始化 context
         context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
@@ -46,8 +52,8 @@ class LlamaXBlock(XBlock):
     
         html = self.render_template("student_view.html", context) 
         frag = Fragment(html)
-     #   frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-     #   frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
+        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
+        frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
         json_context = {
             'prompt': self.prompt,
             'response': self.response,
@@ -64,8 +70,8 @@ class LlamaXBlock(XBlock):
 
         html = self.render_template("studio_view.html", context)
         frag = Fragment(html)
-    #    frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-    #    frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
+        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
+        frag.add_javascript(self.resource_string("static/js/studio_view.js"))
         # 确保 context 中的数据可以被 JSON 序列化
         json_context = {
             'display_name': self.display_name,
