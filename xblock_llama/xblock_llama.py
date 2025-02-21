@@ -27,7 +27,7 @@ class LlamaXBlock(XBlock):
     model_type = String(
         display_name="Model Type", 
         default="llama", 
-        scope=Scope.settings
+        scope=Scope.user_state
     )
     deepseek_api_key = String(
         display_name="DeepSeek API Key", 
