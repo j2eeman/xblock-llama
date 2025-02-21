@@ -43,7 +43,7 @@ class LlamaXBlock(XBlock):
         frag = Fragment(html)
      #   frag.add_css(self.resource_string("static/css/xblock_llama.css"))
      #   frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
-        frag.initialize_js('LlamaXBlock', json_args=self.get_context())    
+        frag.initialize_js('LlamaXBlock', json_args=context)  # 初始化 JavaScript
         return frag
 
     def studio_view(self, context=None):
@@ -56,7 +56,7 @@ class LlamaXBlock(XBlock):
         frag = Fragment(html)
     #    frag.add_css(self.resource_string("static/css/xblock_llama.css"))
     #    frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
-        frag.initialize_js('LlamaXBlock', json_args=self.get_context())  
+        frag.initialize_js('LlamaXBlock', json_args=context)  
 
         return frag
     
