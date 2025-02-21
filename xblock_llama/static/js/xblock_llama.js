@@ -1,31 +1,20 @@
-function LlamaXBlock(runtime, element) {
-    // ... XBlock 初始化代码 ...
-    console.log("XBlock initialized!");
-}
-
-function js_init_fn(runtime, element) {    
-    console.log("XBlock initialized!");
-    return new LlamaXBlock(runtime, element);
-}
-runtime.register('llama', js_init_fn);
-
-$(function () {
-    $('#get-response').click(function () {
-        var prompt = $('#prompt').val();
-        var modelType = $('#model-type').val(); // 获取选择的模型类型
+function LlamaXBlock(runtime, element, context) {
+    $(element).find('#get-response').click(function () {
+        var prompt = $(element).find('#prompt').val();
+        var modelType = $(element).find('#model-type').val(); // 获取选择的模型类型
         $.ajax({
             type: "POST",
-            url: "/xblock/llama/handler/get_response",
+            url: runtime.handlerUrl(element, 'get_response'),
             data: JSON.stringify({ 'prompt': prompt, 'model_type': modelType }), // 添加 model_type
             contentType: "application/json",
             dataType: "json",
             success: function (data) {
                 var html = parseMarkdown(data.response); // 使用 Markdown 解析器
-                $('#response').html(html);
+                $(element).find('#response').html(html);
             },
             error: function (error) {
                 console.error("Error:", error);
-                $('#response').text("Error: Could not get response.");
+                $(element).find('#response').text("Error: Could not get response.");
             }
         });
     });
@@ -63,11 +52,23 @@ $(function () {
         markdown = markdown.replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>');
 
         // 匹配代码块
-        markdown = markdown.replace(/`(.*?)`/gs, '<pre><code>$1</code></pre>');
+        markdown = markdown.replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
 
         // 匹配行内代码
         markdown = markdown.replace(/`(.*?)`/g, '<code>$1</code>');
 
         return markdown;
     }
+}
+
+function js_init_fn(runtime, element, context) {    
+    return new LlamaXBlock(runtime, element, context);
+}
+
+if (typeof runtime !== 'undefined') {
+    runtime.register('LlamaXBlock', js_init_fn);
+}
+
+$(function () {
+    console.log("Document is ready!");
 });

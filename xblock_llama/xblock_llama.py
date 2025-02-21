@@ -40,6 +40,10 @@ class LlamaXBlock(XBlock):
         context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
         context['response'] = self.response  # 将 response 字段添加到 context 中 
         context['model_type'] = self.model_type  # 将 model_type 字段添加到 context 中
+        #context['llama_selected'] = 'selected' if self.model_type == 'llama' else ''
+        #context['deepseek_selected'] = 'selected' if self.model_type == 'deepseek' else ''
+       #context['deepseek_r1_selected'] = 'selected' if self.model_type == 'deepseek-r1:1.5b' else ''
+    
         html = self.render_template("student_view.html", context) 
         frag = Fragment(html)
      #   frag.add_css(self.resource_string("static/css/xblock_llama.css"))
