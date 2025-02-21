@@ -35,7 +35,7 @@ class LlamaXBlock(XBlock):
         context = context or {}  # 初始化 context
         context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
         context['response'] = self.response  # 将 response 字段添加到 context 中 
-        html = self.render_template("templates/student_view.html", context) 
+        html = self.render_template("student_view.html", context) 
         frag = Fragment(html)
         frag.add_css(self.resource_string("static/css/xblock_llama.css"))
         frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
@@ -48,7 +48,7 @@ class LlamaXBlock(XBlock):
         context['model_type'] = self.model_type
         context['deepseek_api_key'] = self.deepseek_api_key
 
-        html = self.render_template("templates/studio_view.html", context)
+        html = self.render_template("studio_view.html", context)
         frag = Fragment(html)
         frag.add_css(self.resource_string("static/css/xblock_llama.css"))
         frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
