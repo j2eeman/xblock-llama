@@ -78,7 +78,7 @@ class LlamaXBlock(XBlock):
             'model_type': self.model_type,
             'deepseek_api_key': self.deepseek_api_key
         }
-        frag.initialize_js('LlamaXBlock', json_args=json_context)  
+        frag.initialize_js('LlamaXBlockStudioView', json_args=json_context)  
 
         return frag
     

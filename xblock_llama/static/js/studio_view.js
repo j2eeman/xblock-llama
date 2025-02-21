@@ -1,5 +1,5 @@
 
-function LlamaXBlock(runtime, element， context) {
+function LlamaXBlockStudioView(runtime, element， context) {
     $('#save-display-name').click(function () {
         var display_name = $('#display_name').val();
         $('#save-status').text("Saving..."); // 显示保存状态
@@ -83,10 +83,10 @@ function LlamaXBlock(runtime, element， context) {
 }
 
 function js_init_fn(runtime, element， context) {
-    return new LlamaXBlock(runtime, element， context);
+    return new LlamaXBlockStudioView(runtime, element， context);
 }
 
 $(function () {
-    runtime.register('LlamaXBlock', js_init_fn);
+    runtime.register('LlamaXBlockStudioView', js_init_fn);
     // runtime.register('llama', js_init_fn);
 });
