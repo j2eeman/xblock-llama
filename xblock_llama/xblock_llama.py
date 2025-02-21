@@ -3,6 +3,10 @@ from xblock.fields import String, Integer, Scope
 import requests
 import json
 from web_fragments.fragment import Fragment
+from xblockutils.resources import ResourceLoader
+#
+#for self.resource_string css, js
+loader = ResourceLoader(__name__)
 
 class LlamaXBlock(XBlock):
     display_name = String(
@@ -37,8 +41,8 @@ class LlamaXBlock(XBlock):
         context['response'] = self.response  # 将 response 字段添加到 context 中 
         html = self.render_template("student_view.html", context) 
         frag = Fragment(html)
-        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-        frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
+     #   frag.add_css(self.resource_string("static/css/xblock_llama.css"))
+     #   frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
         frag.initialize_js('LlamaXBlock', json_args=self.get_context())    
         return frag
 
@@ -50,8 +54,8 @@ class LlamaXBlock(XBlock):
 
         html = self.render_template("studio_view.html", context)
         frag = Fragment(html)
-        frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-        frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
+    #    frag.add_css(self.resource_string("static/css/xblock_llama.css"))
+    #    frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
         frag.initialize_js('LlamaXBlock', json_args=self.get_context())  
 
         return frag
