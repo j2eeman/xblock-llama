@@ -6,7 +6,7 @@ from web_fragments.fragment import Fragment
 from xblockutils.resources import ResourceLoader
 #
 #for self.resource_string css, js
-loader = ResourceLoader(__name__)
+#loader = ResourceLoader(__name__)
 
 class LlamaXBlock(XBlock):
     display_name = String(
@@ -39,11 +39,17 @@ class LlamaXBlock(XBlock):
         context = context or {}  # 初始化 context
         context['prompt'] = self.prompt  # 从 XBlock 字段中获取 prompt  
         context['response'] = self.response  # 将 response 字段添加到 context 中 
+        context['model_type'] = self.model_type  # 将 model_type 字段添加到 context 中
         html = self.render_template("student_view.html", context) 
         frag = Fragment(html)
      #   frag.add_css(self.resource_string("static/css/xblock_llama.css"))
      #   frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
-        frag.initialize_js('LlamaXBlock', json_args=context)  # 初始化 JavaScript
+        json_context = {
+            'prompt': self.prompt,
+            'response': self.response,
+            'model_type': self.model_type
+        }
+        frag.initialize_js('LlamaXBlock', json_args=json_context)  # 初始化 JavaScript
         return frag
 
     def studio_view(self, context=None):
@@ -56,7 +62,13 @@ class LlamaXBlock(XBlock):
         frag = Fragment(html)
     #    frag.add_css(self.resource_string("static/css/xblock_llama.css"))
     #    frag.add_javascript(self.resource_string("static/js/xblock_llama.js"))
-        frag.initialize_js('LlamaXBlock', json_args=context)  
+        # 确保 context 中的数据可以被 JSON 序列化
+        json_context = {
+            'display_name': self.display_name,
+            'model_type': self.model_type,
+            'deepseek_api_key': self.deepseek_api_key
+        }
+        frag.initialize_js('LlamaXBlock', json_args=json_context)  
 
         return frag
     
