@@ -71,7 +71,7 @@ class LlamaXBlock(XBlock):
         html = self.render_template("studio_view.html", context)
         frag = Fragment(html)
         frag.add_css(self.resource_string("static/css/xblock_llama.css"))
-        frag.add_javascript(self.resource_string("static/js/studio_view.js"))
+        #frag.add_javascript(self.resource_string("static/js/studio_view.js"))
         # 确保 context 中的数据可以被 JSON 序列化
         json_context = {
             'display_name': self.display_name,
