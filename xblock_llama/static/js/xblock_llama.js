@@ -22,14 +22,17 @@ function LlamaXBlock(runtime, element, context) {
     function parseMarkdown(markdown) {
         // 替换换行符为 <br> 标签
         markdown = markdown.replace(/\n/g, '<br>');
+        // --- 新增：解析水平线 ---
+        markdown = markdown.replace(/^---+$/gm, '<hr>');  // 匹配单独一行的 ---
 
         // 匹配标题
-        markdown = markdown.replace(/^# (.*)$/gm, '<h1>$1</h1>');
-        markdown = markdown.replace(/^## (.*)$/gm, '<h2>$1</h2>');
-        markdown = markdown.replace(/^### (.*)$/gm, '<h3>$1</h3>');
-        markdown = markdown.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
-        markdown = markdown.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
-        markdown = markdown.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
+        // --- 解析标题（从高到低处理，避免低级别标题覆盖高级别）---
+        markdown = markdown.replace(/^###### (.*?)(?=\n|$)/gm, '<h6>$1</h6>');  // ######
+        markdown = markdown.replace(/^##### (.*?)(?=\n|$)/gm, '<h5>$1</h5>');   // #####
+        markdown = markdown.replace(/^#### (.*?)(?=\n|$)/gm, '<h4>$1</h4>');    // ####
+        markdown = markdown.replace(/^### (.*?)(?=\n|$)/gm, '<h3>$1</h3>');     // ###
+        markdown = markdown.replace(/^## (.*?)(?=\n|$)/gm, '<h2>$1</h2>');      // ##
+        markdown = markdown.replace(/^# (.*?)(?=\n|$)/gm, '<h1>$1</h1>');       // #
 
         // 匹配粗体和斜体
         markdown = markdown.replace(/\*\*(.*)\*\*/g, '<b>$1</b>');
