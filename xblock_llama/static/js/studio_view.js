@@ -1,5 +1,5 @@
 
-function LlamaXBlockStudioView(runtime, element， context) {
+function LlamaXBlockStudioView(runtime, element, context) {
     $('#save-display-name').click(function () {
         var display_name = $('#display_name').val();
         $('#save-status').text("Saving..."); // 显示保存状态
@@ -82,8 +82,8 @@ function LlamaXBlockStudioView(runtime, element， context) {
     });
 }
 
-function js_init_fn(runtime, element， context) {
-    return new LlamaXBlockStudioView(runtime, element， context);
+function js_init_fn(runtime, element, context) {
+    return new LlamaXBlockStudioView(runtime, element, context);
 }
 
 $(function () {
